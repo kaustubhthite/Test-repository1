@@ -28,3 +28,22 @@ def test_signup_rejects_unknown_activity():
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Activity not found"
+
+
+def test_unregister_participant(monkeypatch):
+    monkeypatch.setitem(
+        activities,
+        "Chess Club",
+        {
+            "description": "Learn strategies and compete in chess tournaments",
+            "schedule": "Fridays, 3:30 PM - 5:00 PM",
+            "max_participants": 12,
+            "participants": ["michael@mergington.edu", "daniel@mergington.edu"],
+        },
+    )
+
+    response = client.delete("/activities/Chess Club/participants/michael@mergington.edu")
+
+    assert response.status_code == 200
+    assert response.json()["detail"] == "Unregistered michael@mergington.edu from Chess Club"
+    assert "michael@mergington.edu" not in activities["Chess Club"]["participants"]
