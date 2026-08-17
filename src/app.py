@@ -114,7 +114,7 @@ def unregister_participant(activity_name: str, email: str):
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Activity not found")
 
-    activity = activities[activity_name]
+    activity = activities[activity_name]    
     normalized_email = email.strip().lower()
     participant_emails = [participant.strip() for participant in activity["participants"]]
 
